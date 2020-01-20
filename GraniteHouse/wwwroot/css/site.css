@@ -28,6 +28,12 @@ body {
     margin: 15px;
 }
 
+/* Vertical align Form items to middle*/
+form#createProduct .form-group.row {
+    display: flex;
+    align-items: center;
+}
+
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {
     /* Hide captions */
