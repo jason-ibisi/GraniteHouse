@@ -6,68 +6,73 @@
 
 <h2 class="text-info mt-4">Product Details</h2>
 
-<div class="p-4 border rounded row">
-    <div class="col-8">
-        <div class="form-group row">
-            <div class="col-4">
-                <label asp-for="Name"></label>
-            </div>
-            <div class="col-8">
-                <input asp-for="Name" class="form-control" readonly />
-            </div>
-        </div>
-        <div class="form-group row">
-            <div class="col-4">
-                <label asp-for="Price"></label>
-            </div>
-            <div class="col-8">
-                <input asp-for="Price" class="form-control" readonly />
-            </div>
-        </div>
-        <div class="form-group row">
-            <div class="col-4">
-                <label asp-for="ShadeColor"></label>
-            </div>
-            <div class="col-8">
-                <input asp-for="ShadeColor" class="form-control" readonly />
-            </div>
-        </div>
-        <div class="form-group row">
-            <div class="col-4">
-                <label asp-for="ProductTypes"></label>
-            </div>
-            <div class="col-8">
-                <input asp-for="ProductTypes.Name" class="form-control" readonly />
-            </div>
-        </div>
-        @if (!Model.SpecialTags.Name.Equals("--None--"))
-        {
+<form method="post">
+
+
+    <div class="p-4 border rounded row">
+        <div class="col-8">
             <div class="form-group row">
                 <div class="col-4">
-                    <label asp-for="SpecialTags"></label>
+                    <label asp-for="Name"></label>
                 </div>
                 <div class="col-8">
-                    <input asp-for="SpecialTags.Name" class="form-control" readonly />
+                    <input asp-for="Name" class="form-control" readonly />
                 </div>
             </div>
-        }
-        <div class="form-group row">
-            <div class="col-4">
-                <label hidden>Add to cart</label>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Price"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Price" class="form-control" readonly />
+                </div>
             </div>
-            <div class="col-8">
-                <button type="submit" value="Add to cart" asp-route.-id="@Model.Id" class="btn btn-primary form-control">Add to Cart</button>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="ShadeColor"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="ShadeColor" class="form-control" readonly />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="ProductTypes"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="ProductTypes.Name" class="form-control" readonly />
+                </div>
+            </div>
+            @if (!Model.SpecialTags.Name.Equals("--None--"))
+            {
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="SpecialTags"></label>
+                    </div>
+                    <div class="col-8">
+                        <input asp-for="SpecialTags.Name" class="form-control" readonly />
+                    </div>
+                </div>
+            }
+            <div class="form-group row">
+                <div class="col-4">
+                    <label hidden>Add to cart</label>
+                </div>
+                <div class="col-8">
+                    <button type="submit" value="Add to cart" asp-route.-id="@Model.Id" class="btn btn-primary form-control">Add to Cart</button>
+                </div>
             </div>
         </div>
+        <div class="col-3 offset-1">
+            <img src="@Model.Image" width="100%" style="border-radius:5px; border:1px solid #bbb9b9;" />
+            @if (Model.Available)
+            {
+                <img src="~/images/inStock.jpg" width="50%" style="display: block; margin-left: auto; margin-right: auto;" />
+            }
+        </div>
+        <div class="form-group">
+            <input hidden asp-for="Id" />
+            <a asp-action="Index" class="btn btn-success">Back to List</a>
+        </div>
     </div>
-    <div class="col-3 offset-1">
-        <img src="@Model.Image" width="100%" style="border-radius:5px; border:1px solid #bbb9b9;" />
-        @if(Model.Available)
-        {
-            <img src="~/images/inStock.jpg" width="50%" style="display: block; margin-left: auto; margin-right: auto;" />
-        }
-    </div>
-    <div class="form-group">
-        <a asp-action="Index" class="btn btn-success">Back to List</a>
-    </div>
-</div>
+</form>
