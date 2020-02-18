@@ -1,5 +1,9 @@
 ﻿@model GraniteHouse.Models.Products
 @using GraniteHouse.Extensions
+@using Microsoft.AspNetCore.Http
+
+@inject IHttpContextAccessor HttpContextAccessor
+
 @{
     ViewData["Title"] = "Details";
 }
@@ -7,8 +11,6 @@
 <h2 class="text-info mt-4">Product Details</h2>
 
 <form method="post">
-
-
     <div class="p-4 border rounded row">
         <div class="col-8">
             <div class="form-group row">
@@ -59,7 +61,24 @@
                     <label hidden>Add to cart</label>
                 </div>
                 <div class="col-8">
-                    <button type="submit" value="Add to cart" asp-route.-id="@Model.Id" class="btn btn-primary form-control">Add to Cart</button>
+                    @{
+                        bool isInCart = false;
+                        List<int> lstShoppingCart = HttpContextAccessor.HttpContext.Session.Get<List<int>>("sesShoppingCart");
+
+                        if (lstShoppingCart != null && lstShoppingCart.Contains(Model.Id))
+                        {
+                            isInCart = true;
+                        }
+                    }
+
+                    @if (isInCart)
+                    {
+                        <button type="submit" value="Remove from Cart" asp-action="remove" asp-route.-id="@Model.Id" class="btn btn-danger form-control">Remove from Cart</button>
+                    }
+                    else
+                    {
+                        <button type="submit" value="Add to cart" asp-route.-id="@Model.Id" class="btn btn-primary form-control">Add to Cart</button>
+                    }
                 </div>
             </div>
         </div>

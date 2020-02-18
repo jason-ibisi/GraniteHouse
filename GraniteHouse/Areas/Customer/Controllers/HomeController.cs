@@ -47,10 +47,27 @@ namespace GraniteHouse.Controllers
             }
 
             lstShoppingCart.Add(id);
-            HttpContext.Session.Set<List<int>>("sesShoppingCart", lstShoppingCart);
+            HttpContext.Session.Set("sesShoppingCart", lstShoppingCart);
 
             return RedirectToAction("Index", "Home", new { area = "Customer" });
 
+        }
+
+        public IActionResult Remove(int id)
+        {
+            List<int> lstShoppingCart = HttpContext.Session.Get<List<int>>("sesShoppingCart");
+            
+            if(lstShoppingCart.Count > 0)
+            {
+                if(lstShoppingCart.Contains(id))
+                {
+                    lstShoppingCart.Remove(id);
+                }
+            }
+
+            HttpContext.Session.Set("sesShoppingCart", lstShoppingCart);
+
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult About()
