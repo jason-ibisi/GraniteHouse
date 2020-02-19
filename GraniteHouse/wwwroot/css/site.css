@@ -34,6 +34,23 @@ form#createProduct .form-group.row {
     align-items: center;
 }
 
+/* Vertical align Shopping Cart Table items to middle*/
+table#ShoppingCartDetails th,
+table#ShoppingCartDetails td {
+    vertical-align: middle;
+}
+
+#AppointmentDetails label {
+    margin-bottom: 0px;
+}
+
+#AppointmentDetails .form-control {
+    padding-bottom: 2px;
+    padding-top: 2px;
+    margin-bottom: 14px;
+    height: calc(0.5em + 1.5rem + 0rem)
+}
+
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {
     /* Hide captions */
