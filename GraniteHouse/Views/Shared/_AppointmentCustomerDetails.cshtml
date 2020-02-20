@@ -1,0 +1,40 @@
+﻿@model GraniteHouse.Models.Appointments
+
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+<h4 class="text-success">Appointment Details</h4>
+
+<div style="background-color:aliceblue" class="container border">
+    <div class="col-12">
+        <div class="row" style="padding-top: 10px">
+            <div class="col-sm-2" style="display: flex; align-items: center">
+                Full Name
+            </div>
+            <div class="col-sm-3" >
+                <input asp-for="@Model.CustomerName" readonly class="form-control" />
+            </div>
+            <div class="col-sm-2 offset-sm-2" style="display: flex; align-items: center">
+                Email
+            </div>
+            <div class="col-sm-3">
+                <input asp-for="@Model.CustomerEmail" readonly class="form-control" />
+            </div>
+        </div>
+        <div class="row" style="padding-top: 10px">
+            <div class="col-sm-2" style="display: flex; align-items: center">
+                Phone Number
+            </div>
+            <div class="col-sm-3">
+                <input asp-for="@Model.CustomerPhone" readonly class="form-control" />
+            </div>
+            <div class="col-sm-2 offset-sm-2" style="display: flex; align-items: center">
+                Appointment Date
+            </div>
+            <div class="col-sm-3">
+                <input asp-for="@Model.AppointmentDate" readonly class="form-control" />
+            </div>
+        </div>
+    </div>
+</div>

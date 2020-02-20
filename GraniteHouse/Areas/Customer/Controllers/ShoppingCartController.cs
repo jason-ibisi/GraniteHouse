@@ -45,6 +45,7 @@ namespace GraniteHouse.Areas.Customer.Controllers
             return View(ShoppingCartVM);
         }
 
+        // Post Appointment
         [HttpPost, ActionName("Index")]
         [ValidateAntiForgeryToken]
         public IActionResult IndexPost()
@@ -74,7 +75,39 @@ namespace GraniteHouse.Areas.Customer.Controllers
             lstShoppingCartItems = new List<int>();
             HttpContext.Session.Set("sesShoppingCart", lstShoppingCartItems);
 
-            return RedirectToAction("Index");
+            return RedirectToAction("AppointmentConfirmation", "ShoppingCart", new { Id = appointmentId });
+        }
+
+        // Remove an item from the Shopping Cart
+        public IActionResult Remove(int id)
+        {
+            List<int> lstShoppingCartItems = HttpContext.Session.Get<List<int>>("sesShoppingCart");
+
+            if(lstShoppingCartItems.Count > 0)
+            {
+                if(lstShoppingCartItems.Contains(id))
+                {
+                    lstShoppingCartItems.Remove(id);
+                }
+            }
+
+            HttpContext.Session.Set("sesShoppingCart", lstShoppingCartItems);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        // Get Appointment Confirmation
+        public IActionResult AppointmentConfirmation(int id)
+        {
+            ShoppingCartVM.Appointments = _db.Appointments.Where(a => a.Id == id).FirstOrDefault();
+            List<ProductsSelectedForAppointment> objProdList = _db.ProductsSelectedForAppointment.Where(p => p.AppointmentId == id).ToList();
+
+            foreach(ProductsSelectedForAppointment pSFAObj in objProdList)
+            {
+                ShoppingCartVM.Products.Add(_db.Products.Include(p => p.ProductTypes).Include(p => p.SpecialTags).Where(p => p.Id == pSFAObj.ProductId).FirstOrDefault());
+            }
+
+            return View(ShoppingCartVM);
         }
     }
 }
