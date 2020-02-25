@@ -51,6 +51,10 @@ table#ShoppingCartDetails td {
     height: calc(0.5em + 1.5rem + 0rem)
 }
 
+.table th, .table td {
+    vertical-align: middle;
+}
+
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {
     /* Hide captions */
