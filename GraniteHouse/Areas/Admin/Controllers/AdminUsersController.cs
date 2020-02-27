@@ -65,5 +65,42 @@ namespace GraniteHouse.Areas.Admin.Controllers
 
             return View(applicationUser);
         }
+
+        //Get Delete Admin User
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (id == null || id.Trim().Length == 0)
+            {
+                return NotFound();
+            }
+
+            var userFromDb = await _db.ApplicationUsers.FindAsync(id);
+
+            if (userFromDb == null)
+            {
+                return NotFound();
+            }
+
+            return View(userFromDb);
+        }
+
+        // POST Edit Admin User
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteADMIN(string id)
+        {
+
+            if (ModelState.IsValid)
+            {
+                ApplicationUser user = _db.ApplicationUsers.Where(u => u.Id == id).FirstOrDefault();
+                user.LockoutEnd = DateTime.Now.AddYears(10);
+                user.LockoutEnabled = true;
+
+                _db.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
