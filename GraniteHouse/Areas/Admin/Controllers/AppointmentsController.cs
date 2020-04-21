@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using GraniteHouse.Data;
+using GraniteHouse.Models;
 using GraniteHouse.Models.ViewModel;
 using GraniteHouse.Utility;
 using Microsoft.AspNetCore.Authorization;
@@ -53,7 +54,7 @@ namespace GraniteHouse.Areas.Admin.Controllers
 
             if (searchPhone != null)
             {
-                appointmentVM.Appointments = appointmentVM.Appointments.Where(a => a.CustomerPhone.ToLower().Contains(searchName.ToLower())).ToList();
+                appointmentVM.Appointments = appointmentVM.Appointments.Where(a => a.CustomerPhone.ToLower().Contains(searchPhone.ToLower())).ToList();
             }
 
             if (searchAppointmentDate != null)
@@ -68,6 +69,30 @@ namespace GraniteHouse.Areas.Admin.Controllers
                     throw exception;
                 }
             }
+
+            return View(appointmentVM);
+        }
+
+        // Get Edit Appointments
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var productsList = (IEnumerable<Products>)(from product in _db.Products
+                                                   join appointment in _db.ProductsSelectedForAppointment
+                                                   on product.Id equals appointment.ProductId
+                                                   where appointment.AppointmentId == id
+                                                   select product).Include("ProductTypes");
+
+            AppointmentDetailsViewModel appointmentVM = new AppointmentDetailsViewModel()
+            {
+                Appointment = _db.Appointments.Include(a => a.SalesPerson).Where(a => a.Id == id).FirstOrDefault(),
+                SalesPerson = _db.ApplicationUsers.ToList(),
+                Products = productsList.ToList()
+            };
 
             return View(appointmentVM);
         }
