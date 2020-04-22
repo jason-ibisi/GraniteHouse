@@ -1,0 +1,115 @@
+﻿@model GraniteHouse.Models.ViewModel.AppointmentDetailsViewModel
+@using GraniteHouse.Extensions
+@using GraniteHouse.Utility
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="text-info mt-2">Delete Appointment</h2>
+
+<form method="post" asp-action="Delete" id="deleteProduct">
+    <div class="p-4 border rounded row">
+        <input hidden asp-for="Appointment.Id" />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="col-6">
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Appointment.CustomerName"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Appointment.CustomerName" readonly class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Appointment.CustomerEmail"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Appointment.CustomerEmail" readonly class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Appointment.AppointmentDate"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Appointment.AppointmentDate" readonly type="text" id="apptmtDatePicker" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Appointment.AppointmentTime"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Appointment.AppointmentTime" readonly type="text" id="apptmtTimePicker" class="timepicker form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Appointment.CustomerPhone"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Appointment.CustomerPhone" readonly class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Appointment.SalesPerson"></label>
+                </div>
+                <div class="col-8">
+                    @if (User.IsInRole(StaticDetails.AdminEndUser))
+                    {
+                        <input asp-for="@Model.Appointment.SalesPerson.Name" readonly class="form-control" />
+                        <input asp-for="@Model.Appointment.SalesPersonId" hidden />
+                    }
+                    else
+                    {
+                        <select asp-for="@Model.Appointment.SalesPersonId"
+                                asp-items="Model.SalesPerson.ToSelectListItemString(Model.Appointment.SalesPersonId)"
+                                disabled class="form-control"></select>
+                    }
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Appointment.IsConfirmed"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Appointment.IsConfirmed" readonly class="form-control" />
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-6">
+            <partial name="~/Views/Shared/_AppointmentProductDetails.cshtml" model="Model.Products" />
+        </div>
+        <div class="form-group">
+            <input type="submit" class="btn btn-danger" asp-route-id="@Model.Appointment.Id" value="Delete" />
+            <a asp-action="Index" class="btn btn-success">Back to List</a>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+
+    <script>
+        $(document).ready(function () {
+            var apptmtDateTime = document.getElementById('apptmtDatePicker').value;
+            var apptmtDateArray = apptmtDateTime.indexOf(" ") > 0 ? apptmtDateTime.split(" ") : apptmtDateTime.split("T");
+            console.log("Appointment Date: ", apptmtDateArray);
+
+            var apptmtTime = apptmtDateArray[1].substring(0, 5);
+            apptmtTime = apptmtTime.slice(-1) == ":" ? apptmtTime.substring(0, apptmtTime.length - 1) : apptmtTime;
+
+            apptmtTime = apptmtDateArray.length > 2 ? apptmtTime + ' ' + apptmtDateArray[2] : apptmtTime;
+
+            console.log("Appointment Time: ", apptmtTime);
+
+            $("#apptmtDatePicker").attr("value", apptmtDateArray[0]);
+            $("#apptmtTimePicker").attr('value', apptmtTime);
+        });
+    </script>
+}
