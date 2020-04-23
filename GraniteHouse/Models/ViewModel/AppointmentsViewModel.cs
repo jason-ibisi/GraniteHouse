@@ -8,5 +8,6 @@ namespace GraniteHouse.Models.ViewModel
     public class AppointmentsViewModel
     {
         public List<Appointments> Appointments { get; set; }
+        public PagingInfo PagingInfo { get; set; }
     }
 }

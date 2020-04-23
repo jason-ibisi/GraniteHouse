@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using GraniteHouse.Data;
 using GraniteHouse.Models;
@@ -18,13 +19,14 @@ namespace GraniteHouse.Areas.Admin.Controllers
     public class AppointmentsController : Controller
     {
         private readonly ApplicationDbContext _db;
+        private int PageSize = 2;
 
         public AppointmentsController(ApplicationDbContext db)
         {
             _db = db;
         }
 
-        public async Task<IActionResult> Index(string searchName = null, string searchEmail = null, string searchPhone = null, string searchAppointmentDate = null)
+        public async Task<IActionResult> Index(string searchName = null, string searchEmail = null, string searchPhone = null, string searchAppointmentDate = null, int productPage=1)
         {
             System.Security.Claims.ClaimsPrincipal currentUser = this.User;
             var claimsIdentity = (ClaimsIdentity)this.User.Identity;
@@ -34,6 +36,32 @@ namespace GraniteHouse.Areas.Admin.Controllers
             {
                 Appointments = new List<Models.Appointments>()
             };
+
+            StringBuilder param = new StringBuilder();
+            param.Append("/Admin/Appointments?productPage=:");
+            param.Append("&searchName=");
+            if (searchName != null)
+            {
+                param.Append(searchName);
+            }
+
+            param.Append("&searchEmail=");
+            if (searchEmail != null)
+            {
+                param.Append(searchEmail);
+            }
+
+            param.Append("&searchPhone=");
+            if (searchPhone != null)
+            {
+                param.Append(searchPhone);
+            }
+
+            param.Append("&searchAppointmentDate=");
+            if (searchAppointmentDate != null)
+            {
+                param.Append(searchAppointmentDate);
+            }
 
             appointmentVM.Appointments = _db.Appointments.Include(a => a.SalesPerson).ToList();
 
@@ -69,6 +97,16 @@ namespace GraniteHouse.Areas.Admin.Controllers
                     throw exception;
                 }
             }
+
+            var count = appointmentVM.Appointments.Count;
+            appointmentVM.Appointments = appointmentVM.Appointments.OrderBy(p => p.AppointmentDate).Skip((productPage - 1) * PageSize).Take(PageSize).ToList();
+            appointmentVM.PagingInfo = new PagingInfo
+            {
+                CurrentPage = productPage,
+                ItemsPerPage = PageSize,
+                TotalItems = count,
+                UrlParam = param.ToString()
+            };
 
             return View(appointmentVM);
         }
